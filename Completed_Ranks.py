@@ -55,10 +55,3 @@ class CompletedList(object):
             #prints out the date in month/day format and the item_list's first value (which is the original item) with spaces in between
             print ((time3[0] + "/" + time2[1]) + "  " + self.completed_dict[item_time][0] + "  " + self.completed_dict[item_time][1])
 
-
-
-
-my_list = CompletedList("My To Do List")
-
-my_list.add_item()
-my_list.print_list()
