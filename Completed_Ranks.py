@@ -2,33 +2,25 @@ import time
 import datetime
 
 #creates a list of all non required for Eagle BSA Merit Badges as of 2018 from a text document called Other_Merit_Badge_List.txt:
-
 other_merit_badges = None
-
 with open("Other_Merit_Badge_List.txt", "r") as OtherMeritBadgeList:
     other_merit_badges = str(OtherMeritBadgeList.read())
-
 other_merit_badges = other_merit_badges.split("\n")
 
 
 #creates a list of all required for Eagle BSA Merit Badges as of 2018 from a text document called Req_Merit_Badge_List.txt:
-
 req_merit_badges = None
-
 with open("Req_Merit_Badge_List.txt", "r") as ReqMeritBadgeList:
     req_merit_badges = str(ReqMeritBadgeList.read())
-
 req_merit_badges = req_merit_badges.split("\n")
 
 
 #creates a list of all BSA Scout Ranks as of 2018 from a text document called Scout_Ranks.txt:
-
 scout_ranks = None
-
 with open("Scout_Ranks.txt", "r") as ScoutRanks:
     scout_ranks = str(ScoutRanks.read())
-
 scout_ranks = scout_ranks.split("/n")
+
 
 
 #creates class for achievement lists (lists of completed ranks)
@@ -45,9 +37,10 @@ class CompletedList(object):
         self.date = self.current_date
 
     def add_item(self):
+
+        item = str(input("Item: "))
                                  
         #adds the inputed item into completed_dict under the correlating time stamp
-        item = str(input("Item: "))
         item_list = [item]
         self.completed_dict[str(datetime.datetime.now())] = item_list
 
@@ -60,6 +53,10 @@ class CompletedList(object):
 
         else:
             item_list.append("No Type")
+
+        #writes the inputed item unto Achievements.txt
+        with open("Achievements.txt", "r+") as Achievements
+
 
     def print_list(self):
 
@@ -76,9 +73,6 @@ class CompletedList(object):
             #prints out the date in month/day format and the item_list's first value (which is the original item) with spaces in between
             print ((time3[0] + "/" + time2[1]) + "  " + self.completed_dict[item_time][0] + "  " + self.completed_dict[item_time][1])
 
-<<<<<<< HEAD
-=======
-
 
 #creates display where one can track progress towards ranks and add completed ranks
 
@@ -92,13 +86,15 @@ class Display(object):
 
         self.username = username
         self.completed_list = CompletedList(str(username) + "'s Completed List")
-
+        
     def count_ranks(self):
 
         #counts how many badges of each type (req, other, self.current_scout_rank) are in self's 
         for item_time in self.completed_list.completed_dict:
 
             item = self.completed_list.completed_dict[item_time][0]
+
+            if item
             
             if item in req_merit_badges:
                 self.num_req_merit_badges += 1
@@ -168,7 +164,7 @@ class Display(object):
             print ("[" + (" "*10) + "]  " + "Scout Rank")
 
         #creates endless loop of adding items and seeing progress towards ranks
-        self.scout_display()
+        #self.scout_display()
 
     def scout_display(self):
 
@@ -176,8 +172,36 @@ class Display(object):
         self.completed_list.add_item()
         self.count_ranks()
         self.print_display()
+
+class ScoutTrack(Display):
+
+    def __init__(self):
+
+        print ("Welcome to Scout Track! Please choose a username.")
+        self.username = str(input("Username:"))
+        self.completed_list = CompletedList(str(self.username) + "'s Completed List")
+        print ("To add achievements, type add.")
+        print ("To see your progress towards ranks, type progress.")
+        print ("To see a list of past achievements, type history.")
+
+    def prompt(self):
         
+        self.command = None
+        while (not(self.command == "add" or self.command == "progress" or self.command == "history")): 
+            self.command = input("Prompt:")
+
+        if self.command == "add":
+            self.completed_list.add_item()
+            self.count_ranks()
+            self.prompt()
+
+        if self.command == "progress":
+            self.print_display()
+            self.prompt()
+
+        if self.command == "history":
+            self.completed_list.print_list()
+            self.prompt()
             
-my_scouting = Display("Nicholas")
-my_scouting.scout_display()
->>>>>>> 4f2a8e8181daa243a7bc7296145f0a3e8dac5dfa
+my_scouting = ScoutTrack()
+my_scouting.prompt()
