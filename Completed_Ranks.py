@@ -30,6 +30,7 @@ class CompletedList(object):
     completed_dict = {
         }
     current_date = ((datetime.date.today().strftime("%B")) + " " + (datetime.date.today().strftime("%d")))
+    num_adds = 0
 
     def __init__(self, list_name):
 
@@ -39,23 +40,36 @@ class CompletedList(object):
     def add_item(self):
 
         item = str(input("Item: "))
-                                 
-        #adds the inputed item into completed_dict under the correlating time stamp
-        item_list = [item]
-        self.completed_dict[str(datetime.datetime.now())] = item_list
 
-        #adds achievement type of the inputed item (i.e. Merit Badge, Scout Rank, or No Type)
-        if item in scout_ranks:
-            item_list.append("Scouting Rank")
+        #checks if item is already in Achievements.txt
+        with open("Achievements.txt", "r") as Achievements:
+            completed_achievements = str(Achievements.read())
+            completed_achievements = completed_achievements.split("\n")
+
+        if item not in completed_achievements:
             
-        elif (item in other_merit_badges) or (item in req_merit_badges):
-            item_list.append("Merit Badge")
+            #adds the inputed item into completed_dict under the correlating time stamp
+            item_list = [item]
+            self.completed_dict[str(datetime.datetime.now())] = item_list
 
-        else:
-            item_list.append("No Type")
+            #adds achievement type of the inputed item (i.e. Merit Badge, Scout Rank, or No Type)
+            if item in scout_ranks:
+                item_list.append("Scouting Rank")
+                
+            elif (item in other_merit_badges) or (item in req_merit_badges):
+                item_list.append("Merit Badge")
 
-        #writes the inputed item unto Achievements.txt
-        with open("Achievements.txt", "r+") as Achievements
+            else:
+                item_list.append("No Type")
+
+            #writes the inputed item unto Achievements.txt
+            with open("Achievements.txt", "r") as Achievements:
+                achievements = Achievements.readlines()
+
+            achievements.append(str(item + "\n"))
+
+            with open("Achievements.txt", "w") as Achievements:
+                            Achievements.writelines(achievements)
 
 
     def print_list(self):
@@ -94,18 +108,20 @@ class Display(object):
 
             item = self.completed_list.completed_dict[item_time][0]
 
-            if item
-            
+            #checks if item in required merit badges list
             if item in req_merit_badges:
                 self.num_req_merit_badges += 1
-
+            
+            #checks if item in other merit badges list
             elif item in other_merit_badges:
                 self.num_other_merit_badges += 1
-
+                
+            #checks if item in scout ranks list
             elif item in scout_ranks:
                 self.current_scout_rank = str(item)
                 
     def print_display(self):
+        
         self.num_merit_badges = self.num_req_merit_badges + self.num_other_merit_badges
         
         #Eagle (21 min merit badges)
@@ -184,7 +200,13 @@ class ScoutTrack(Display):
         print ("To see your progress towards ranks, type progress.")
         print ("To see a list of past achievements, type history.")
 
+        #clears achievements
+        with open("Achievements.txt", "r+") as Achievements:
+            Achievements.truncate()
+
     def prompt(self):
+
+        print (self.completed_list.completed_dict)
         
         self.command = None
         while (not(self.command == "add" or self.command == "progress" or self.command == "history")): 
@@ -196,6 +218,7 @@ class ScoutTrack(Display):
             self.prompt()
 
         if self.command == "progress":
+            self.count_ranks()
             self.print_display()
             self.prompt()
 
