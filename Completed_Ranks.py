@@ -56,8 +56,11 @@ class CompletedList(object):
             if item in scout_ranks:
                 item_list.append("Scouting Rank")
                 
-            elif (item in other_merit_badges) or (item in req_merit_badges):
-                item_list.append("Merit Badge")
+            elif item in req_merit_badges:
+                item_list.append("Req Merit Badge")
+
+            elif item in other_merit_badges:
+                item_list.append("Other Merit Badge")
 
             else:
                 item_list.append("No Type")
@@ -106,19 +109,19 @@ class Display(object):
         #counts how many badges of each type (req, other, self.current_scout_rank) are in self's 
         for item_time in self.completed_list.completed_dict:
 
-            item = self.completed_list.completed_dict[item_time][0]
+            item_type = self.completed_list.completed_dict[item_time][1]
 
             #checks if item in required merit badges list
-            if item in req_merit_badges:
+            if item_type == "Req Merit Badge":
                 self.num_req_merit_badges += 1
             
             #checks if item in other merit badges list
-            elif item in other_merit_badges:
+            elif item_type == "Other Merit Badge":
                 self.num_other_merit_badges += 1
                 
             #checks if item in scout ranks list
-            elif item in scout_ranks:
-                self.current_scout_rank = str(item)
+            elif item_type == "Scouting Rank":
+                self.current_scout_rank = str(self.completed_list.completed_dict[item_time][0])
                 
     def print_display(self):
         
