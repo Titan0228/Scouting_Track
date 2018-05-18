@@ -32,9 +32,13 @@ class CompletedList(object):
     current_date = ((datetime.date.today().strftime("%B")) + " " + (datetime.date.today().strftime("%d")))
     num_adds = 0
 
-    def __init__(self, list_name):
+    num_req_merit_badges = 0
+    num_other_merit_badges = 0
+    current_scout_rank = None
 
-        self.name = list_name
+    def __init__(self, username):
+
+        self.username = username
         self.date = self.current_date
 
     def add_item(self):
@@ -48,9 +52,11 @@ class CompletedList(object):
 
         if item not in completed_achievements:
             
+            
             #adds the inputed item into completed_dict under the correlating time stamp
             item_list = [item]
             self.completed_dict[str(datetime.datetime.now())] = item_list
+            
 
             #adds achievement type of the inputed item (i.e. Merit Badge, Scout Rank, or No Type)
             if item in scout_ranks:
@@ -73,6 +79,27 @@ class CompletedList(object):
 
             with open("Achievements.txt", "w") as Achievements:
                             Achievements.writelines(achievements)
+                            
+
+            #counts how many badges of each type (req, other, self.current_scout_rank) are in self's 
+            for item_time in self.completed_list.completed_dict:
+
+                item_type = self.completed_list.completed_dict[item_time][1]
+                item = self.completed_list.completed_dict[item_time][0]
+
+                if item not in completed_achievements:
+
+                    #checks if item in required merit badges list
+                    if item_type == "Req Merit Badge":
+                        self.num_req_merit_badges += 1
+                    
+                    #checks if item in other merit badges list
+                    elif item_type == "Other Merit Badge":
+                        self.num_other_merit_badges += 1
+                        
+                    #checks if item in scout ranks list
+                    elif item_type == "Scouting Rank":
+                        self.current_scout_rank = str(item)
 
 
     def print_list(self):
@@ -90,71 +117,37 @@ class CompletedList(object):
             #prints out the date in month/day format and the item_list's first value (which is the original item) with spaces in between
             print ((time3[0] + "/" + time2[1]) + "  " + self.completed_dict[item_time][0] + "  " + self.completed_dict[item_time][1])
 
-
-#creates display where one can track progress towards ranks and add completed ranks
-
-class Display(object):
-
-    num_req_merit_badges = 0
-    num_other_merit_badges = 0
-    current_scout_rank = None
-
-    def __init__(self, username):
-
-        self.username = username
-        self.completed_list = CompletedList(str(username) + "'s Completed List")
-        
-    def count_ranks(self):
-
-        #counts how many badges of each type (req, other, self.current_scout_rank) are in self's 
-        for item_time in self.completed_list.completed_dict:
-
-            item_type = self.completed_list.completed_dict[item_time][1]
-
-            #checks if item in required merit badges list
-            if item_type == "Req Merit Badge":
-                self.num_req_merit_badges += 1
-            
-            #checks if item in other merit badges list
-            elif item_type == "Other Merit Badge":
-                self.num_other_merit_badges += 1
-                
-            #checks if item in scout ranks list
-            elif item_type == "Scouting Rank":
-                self.current_scout_rank = str(self.completed_list.completed_dict[item_time][0])
-                
     def print_display(self):
-        
+
         self.num_merit_badges = self.num_req_merit_badges + self.num_other_merit_badges
-        
+
         #Eagle (21 min merit badges)
-        if self.num_merit_badges > 21:
+        if self.num_merit_badges >= 21:
             scaled_num = 10
+            self.current_scout_rank = "Eagle Scout"
         else:
             scaled_num = int((self.num_merit_badges/21)*10)
         print ("[" + ("|"*(scaled_num)) + (" "*(10-scaled_num)) + "]  " + "Eagle Scout")
-        if self.num_merit_badges >= 21:
-            self.current_scout_rank = "Eagle Scout"
 
             
         #Life (11 min merit badges)
-        if self.num_merit_badges > 11:
+        if self.num_merit_badges >= 11:
             scaled_num = 10
+            if self.num_merit_badges < 21:
+                self.current_scout_rank = "Life Scout"
         else:
             scaled_num = int((self.num_merit_badges/11)*10)
         print ("[" + ("|"*(scaled_num)) + (" "*(10-scaled_num)) + "]  " + "Life Scout")
-        if self.num_merit_badges >= 11 and self.num_merit_badges < 21:
-            self.current_scout_rank = "Life Scout"
 
-            
+                    
         #Star (6 min merit badges)
-        if self.num_merit_badges > 6:
+        if self.num_merit_badges >= 6:
             scaled_num = 10
+            if self.num_merit_badges < 11:
+                self.current_scout_rank = "Star Scout"
         else:
             scaled_num = int((self.num_merit_badges/6)*10)
         print ("[" + ("|"*(scaled_num)) + (" "*(10-scaled_num)) + "]  " + "Star Scout")
-        if self.num_merit_badges >= 6 and self.num_merit_badges < 11:
-            self.current_scout_rank = "Star Scout"
 
             
         #First Class
@@ -192,10 +185,12 @@ class Display(object):
         self.count_ranks()
         self.print_display()
 
-class ScoutTrack(Display):
+
+class ScoutTrack(CompletedList):
 
     def __init__(self):
 
+        self.date = self.current_date
         print ("Welcome to Scout Track! Please choose a username.")
         self.username = str(input("Username:"))
         self.completed_list = CompletedList(str(self.username) + "'s Completed List")
@@ -209,24 +204,22 @@ class ScoutTrack(Display):
 
     def prompt(self):
 
-        print (self.completed_list.completed_dict)
+        print (self.completed_dict)
         
         self.command = None
         while (not(self.command == "add" or self.command == "progress" or self.command == "history")): 
             self.command = input("Prompt:")
 
         if self.command == "add":
-            self.completed_list.add_item()
-            self.count_ranks()
+            self.add_item()
             self.prompt()
 
         if self.command == "progress":
-            self.count_ranks()
             self.print_display()
             self.prompt()
 
         if self.command == "history":
-            self.completed_list.print_list()
+            self.print_list()
             self.prompt()
             
 my_scouting = ScoutTrack()
