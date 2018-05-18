@@ -122,7 +122,7 @@ class CompletedList(object):
         self.num_merit_badges = self.num_req_merit_badges + self.num_other_merit_badges
 
         #Eagle (21 min merit badges)
-        if self.num_merit_badges >= 21:
+        if self.num_req_merit_badges >= 13 and self.num_other_merit_badges >= 8:
             scaled_num = 10
             self.current_scout_rank = "Eagle Scout"
         else:
@@ -204,7 +204,7 @@ class ScoutTrack(CompletedList):
 
     def prompt(self):
 
-        print (self.completed_dict)
+        #print (self.completed_dict)
         
         self.command = None
         while (not(self.command == "add" or self.command == "progress" or self.command == "history")): 
