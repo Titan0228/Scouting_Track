@@ -178,9 +178,6 @@ class CompletedList(object):
         #Detailed descriptions prompt
         print ("Type 'details' to see more...")
 
-        #creates endless loop of adding items and seeing progress towards ranks
-        #self.scout_display()
-
     def print_details(self):
 
             print("Merit Badge Progress Details:")
