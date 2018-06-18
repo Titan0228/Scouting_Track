@@ -122,10 +122,9 @@ class CompletedList(object):
         self.num_merit_badges = self.num_req_merit_badges + self.num_other_merit_badges
 
         #Eagle (21 min merit badges)
-        if self.num_req_merit_badges >= 13 and self.num_other_merit_badges >= 8:
+        if self.num_req_merit_badges >= 21:
             scaled_num = 10
             self.current_scout_rank = "Eagle Scout"
-            print ("[" + ("|"*(scaled_num)) + (" "*(10-scaled_num)) + "]  " + "Eagle Scout")
         else:
             scaled_num = int((self.num_merit_badges/21)*10)
         print ("[" + ("|"*(scaled_num)) + (" "*(10-scaled_num)) + "]  " + "Eagle Scout")
@@ -176,16 +175,53 @@ class CompletedList(object):
         else:
             print ("[" + (" "*10) + "]  " + "Scout Rank")
 
+        #Detailed descriptions prompt
+        print ("Type 'details' to see more...")
+
         #creates endless loop of adding items and seeing progress towards ranks
         #self.scout_display()
 
-    def scout_display(self):
+    def print_details(self):
 
-        #prints out a prompt to add achievements
-        self.completed_list.add_item()
-        self.count_ranks()
-        self.print_display()
+            print("Merit Badge Progress Details:")
 
+            #Eagle (21 min merit badges)
+            if self.num_req_merit_badges >= 13:
+                req_scaled_num = 10
+            else:
+                req_scaled_num = int((self.num_req_merit_badges/13)*10)
+            if self.num_other_merit_badges >= 8:
+                other_scaled_num = 10
+            else:
+                other_scaled_num = int((self.num_other_merit_badges/8)*10)
+                
+            print ("Eagle Scout  " + "Req:[" + ("|"*(req_scaled_num)) + (" "*(10-req_scaled_num)) + "]" + "  Other:[" + ("|"*(other_scaled_num)) + (" "*(10-other_scaled_num)) + "]")
+
+                
+            #Life (11 min merit badges)
+            if self.num_req_merit_badges >= 7:
+                req_scaled_num = 10
+            else:
+                scaled_num = int((self.num_req_merit_badges/7)*10)
+            if self.num_other_merit_badges >= 4:
+                other_scaled_num = 10
+            else:
+                other_scaled_num = int((self.num_other_merit_badges/4)*10)
+                
+            print ("Life Scout   " + "Req:[" + ("|"*(req_scaled_num)) + (" "*(10-req_scaled_num)) + "]" + "  Other:[" + ("|"*(other_scaled_num)) + (" "*(10-other_scaled_num)) + "]")
+
+                        
+            #Star (6 min merit badges)
+            if self.num_req_merit_badges >= 4:
+                req_scaled_num = 10
+            else:
+                scaled_num = int((self.num_req_merit_badges/4)*10)
+            if self.num_other_merit_badges >= 2:
+                other_scaled_num = 10
+            else:
+                other_scaled_num = int((self.num_other_merit_badges/2)*10)
+                
+            print ("Star Scout   " + "Req:[" + ("|"*(req_scaled_num)) + (" "*(10-req_scaled_num)) + "]" + "  Other:[" + ("|"*(other_scaled_num)) + (" "*(10-other_scaled_num)) + "]")
 
 class ScoutTrack(CompletedList):
 
@@ -208,7 +244,7 @@ class ScoutTrack(CompletedList):
         #print (self.completed_dict)
         
         self.command = None
-        while (not(self.command == "add" or self.command == "progress" or self.command == "history")): 
+        while (not(self.command == "add" or self.command == "details" or self.command == "progress" or self.command == "history")): 
             self.command = input("Prompt:")
 
         if self.command == "add":
@@ -219,6 +255,10 @@ class ScoutTrack(CompletedList):
             self.print_display()
             self.prompt()
 
+        if self.command == "details":
+            self.print_details()
+            self.prompt()
+            
         if self.command == "history":
             self.print_list()
             self.prompt()
