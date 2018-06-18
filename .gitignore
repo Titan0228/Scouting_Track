@@ -1,0 +1,54 @@
+
+class PrintDisplay(object):
+
+    num_req_merit_badges = 0
+    num_other_merit_badges = 0
+    current_scout_rank = "Scout"
+    
+    def print_details(self):
+
+            print("Merit Badge Progress Details:")
+
+            #Eagle (21 min merit badges)
+            if self.num_req_merit_badges >= 13:
+                req_scaled_num = 10
+            else:
+                req_scaled_num = int((self.num_req_merit_badges/13)*10)
+            if self.num_other_merit_badges >= 8:
+                other_scaled_num = 10
+            else:
+                other_scaled_num = int((self.num_other_merit_badges/8)*10)
+                
+            print ("Eagle Scout  " + "Req:[" + ("|"*(req_scaled_num)) + (" "*(10-req_scaled_num)) + "]" + "  Other:[" + ("|"*(other_scaled_num)) + (" "*(10-other_scaled_num)) + "]")
+
+                
+            #Life (11 min merit badges)
+            if self.num_req_merit_badges >= 7:
+                req_scaled_num = 10
+            else:
+                scaled_num = int((self.num_req_merit_badges/7)*10)
+            if self.num_other_merit_badges >= 4:
+                other_scaled_num = 10
+            else:
+                other_scaled_num = int((self.num_other_merit_badges/4)*10)
+                
+            print ("Life Scout   " + "Req:[" + ("|"*(req_scaled_num)) + (" "*(10-req_scaled_num)) + "]" + "  Other:[" + ("|"*(other_scaled_num)) + (" "*(10-other_scaled_num)) + "]")
+
+                        
+            #Star (6 min merit badges)
+            if self.num_req_merit_badges >= 4:
+                req_scaled_num = 10
+            else:
+                scaled_num = int((self.num_req_merit_badges/4)*10)
+            if self.num_other_merit_badges >= 2:
+                other_scaled_num = 10
+            else:
+                other_scaled_num = int((self.num_other_merit_badges/2)*10)
+                
+            print ("Star Scout   " + "Req:[" + ("|"*(req_scaled_num)) + (" "*(10-req_scaled_num)) + "]" + "  Other:[" + ("|"*(other_scaled_num)) + (" "*(10-other_scaled_num)) + "]")
+                
+            
+Nicholas = PrintDisplay()
+Nicholas.num_req_merit_badges = int(input("Req: "))
+Nicholas.num_other_merit_badges = int(input("Other: "))
+Nicholas.print_details()
