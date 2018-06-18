@@ -115,7 +115,7 @@ class CompletedList(object):
             time3 = (time2[2].split(" "))
 
             #prints out the date in month/day format and the item_list's first value (which is the original item) with spaces in between
-            print ((time3[0] + "/" + time2[1]) + "  " + self.completed_dict[item_time][0] + "  " + self.completed_dict[item_time][1])
+            print ((time2[1] + "/" + time3[0]) + "  " + self.completed_dict[item_time][0] + "  " + self.completed_dict[item_time][1])
 
     def print_display(self):
 
@@ -125,6 +125,7 @@ class CompletedList(object):
         if self.num_req_merit_badges >= 13 and self.num_other_merit_badges >= 8:
             scaled_num = 10
             self.current_scout_rank = "Eagle Scout"
+            print ("[" + ("|"*(scaled_num)) + (" "*(10-scaled_num)) + "]  " + "Eagle Scout")
         else:
             scaled_num = int((self.num_merit_badges/21)*10)
         print ("[" + ("|"*(scaled_num)) + (" "*(10-scaled_num)) + "]  " + "Eagle Scout")
