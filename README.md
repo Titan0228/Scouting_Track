@@ -1,3 +1,3 @@
-# Scouting_Track
+# Scouting Track
 
 This is a basic progress tracker for BSA rank advancements and merit badges.
